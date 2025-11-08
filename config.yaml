@@ -1,0 +1,59 @@
+# Cosik AI Agent Configuration
+
+agent:
+  name: "Cosik"
+  version: "1.0.0"
+  auto_continuation: true
+  max_retries: 3
+  task_timeout: 300  # seconds
+
+# AI Model Configuration
+ai:
+  provider: "openai"  # options: openai, anthropic, local
+  model: "gpt-4"
+  temperature: 0.7
+  max_tokens: 2000
+
+# Memory Configuration
+memory:
+  enabled: true
+  storage_path: "./data/memory"
+  vector_db_path: "./data/vector_store"
+  max_history: 1000
+  persistence_interval: 60  # seconds
+
+# GUI Automation
+gui:
+  screenshot_interval: 1.0  # seconds
+  confidence_threshold: 0.8
+  failsafe: true
+  pause_between_actions: 0.5
+
+# File Operations
+file_operations:
+  allowed_extensions: [".txt", ".json", ".yaml", ".xml", ".csv", ".log", ".py", ".js", ".html", ".css"]
+  max_file_size: 10485760  # 10 MB
+  backup_enabled: true
+  backup_path: "./data/backups"
+
+# System Access
+system:
+  allow_registry_access: true
+  allow_process_management: true
+  allow_network_access: true
+  restrict_system_files: true
+  safe_mode: false
+
+# Logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file_path: "./logs/agent.log"
+  max_size: 10485760  # 10 MB
+  backup_count: 5
+
+# Self-Modification
+self_modification:
+  enabled: true
+  allowed_files: ["./src/plugins/", "./config.yaml"]
+  require_confirmation: false
+  backup_before_modify: true
