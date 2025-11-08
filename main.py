@@ -20,6 +20,7 @@ from src.system.system_manager import SystemManager
 from src.config.config_loader import ConfigLoader
 from src.ai.ai_engine import AIEngine
 from src.plugins.plugin_manager import PluginManager
+from src.vision.computer_vision import ComputerVision
 
 
 class CosikAgent:
@@ -47,13 +48,16 @@ class CosikAgent:
         # Initialize AI engine first
         self.ai_engine = AIEngine(self.config)
         
+        # Initialize computer vision
+        self.vision = ComputerVision(self.config)
+        
         # Initialize plugin manager
         self.plugin_manager = PluginManager(self.config)
         self.plugin_manager.load_all_plugins()
         
         # Initialize components
         self.nlp = LanguageProcessor(self.config, ai_engine=self.ai_engine)
-        self.gui = GUIController(self.config)
+        self.gui = GUIController(self.config, vision=self.vision)
         self.memory = MemoryManager(self.config)
         self.task_executor = TaskExecutor(self.config, self.gui, self.memory, ai_engine=self.ai_engine)
         self.system = SystemManager(self.config)

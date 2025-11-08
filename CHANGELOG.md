@@ -30,7 +30,49 @@ Wszystkie istotne zmiany w projekcie Cosik AI Agent.
   - Klucz API (OPENAI_API_KEY lub ANTHROPIC_API_KEY w .env)
   - Biblioteki: openai>=1.0.0, anthropic>=0.7.0
 
-#### 2. **Plugin Manager - System Zarządzania Pluginami**
+#### 2. **Computer Vision - OCR i Rozpoznawanie Obrazów**
+- **Plik:** `src/vision/computer_vision.py`
+- **Opis:** Zaawansowane możliwości wizji komputerowej
+- **Funkcjonalności:**
+  - OCR (Optical Character Recognition) - ekstrakcja tekstu z ekranu
+  - Template matching - znajdowanie obrazów na ekranie
+  - Wykrywanie elementów UI
+  - Wyszukiwanie tekstu na ekranie z lokalizacją
+  - Wykrywanie wszystkich instancji obrazu
+- **API Methods:**
+  - `extract_text_from_screen(region)` - OCR z ekranu
+  - `extract_text_from_image(path, language)` - OCR z pliku
+  - `find_text_on_screen(text, region)` - Znajdź tekst i lokalizację
+  - `find_image_on_screen(template, confidence)` - Template matching
+  - `find_all_matches(template, confidence)` - Wszystkie dopasowania
+  - `detect_ui_elements()` - Automatyczna detekcja UI
+- **Przykłady:**
+  ```python
+  # Znajdź i kliknij na tekst
+  await gui.click_text("OK")
+  
+  # Znajdź i kliknij na obrazek
+  await gui.click_image("button_template.png")
+  
+  # Czekaj aż pojawi się tekst
+  await gui.wait_for_text("Welcome", timeout=30)
+  
+  # OCR z regionu ekranu
+  result = await vision.extract_text_from_screen(region=(0, 0, 800, 600))
+  print(result['text'])
+  
+  # Znajdź wszystkie przyciski OK
+  result = await vision.find_all_matches("ok_button.png")
+  for match in result['matches']:
+      print(f"Found at ({match['x']}, {match['y']}) confidence: {match['confidence']}")
+  ```
+- **Wymagania:**
+  - OpenCV: opencv-python>=4.8.0
+  - Tesseract OCR: pytesseract>=0.3.10 + Tesseract engine
+  - NumPy: numpy>=1.24.0
+  - scikit-learn (opcjonalnie): dla analizy kolorów
+
+#### 3. **Plugin Manager - System Zarządzania Pluginami**
 - **Plik:** `src/plugins/plugin_manager.py`
 - **Opis:** Zaawansowany system zarządzania pluginami z auto-discovery
 - **Funkcjonalności:**
@@ -64,7 +106,7 @@ Wszystkie istotne zmiany w projekcie Cosik AI Agent.
   plugins = plugin_manager.list_plugins()
   ```
 
-#### 3. **Scheduler Plugin - Harmonogram Zadań**
+#### 4. **Scheduler Plugin - Harmonogram Zadań**
 - **Plik:** `src/plugins/scheduler_plugin.py`
 - **Opis:** Plugin do planowania zadań na określone czasy
 - **Komendy:**
@@ -96,7 +138,7 @@ Wszystkie istotne zmiany w projekcie Cosik AI Agent.
   )
   ```
 
-#### 4. **Web Scraper Plugin - Scraping Stron Web**
+#### 5. **Web Scraper Plugin - Scraping Stron Web**
 - **Plik:** `src/plugins/web_scraper_plugin.py`
 - **Opis:** Plugin do pobierania i ekstrakcji danych ze stron internetowych
 - **Komendy:**
@@ -151,6 +193,21 @@ Wszystkie istotne zmiany w projekcie Cosik AI Agent.
 - **Nowy parametr:** `ai_engine` w konstruktorze
 - **Ulepszona metoda:** `_ai_parse()` teraz wykorzystuje prawdziwy AI
 
+#### GUI Controller
+- **Zmieniony:** `src/automation/gui_controller.py`
+- **Ulepszenia:**
+  - Integracja z Computer Vision module
+  - Nowe metody wykorzystujące OCR
+  - Click na tekst przez OCR
+  - Click na obraz przez template matching
+  - Inteligentne czekanie na teksty i obrazy
+- **Nowy parametr:** `vision` w konstruktorze
+- **Nowe metody:**
+  - `click_text(text, region)` - Kliknij na tekst (OCR)
+  - `click_image(image_path, confidence)` - Kliknij na obraz (template matching)
+  - `wait_for_text(text, timeout, region)` - Czekaj na pojawienie się tekstu
+  - `wait_for_image(image_path, timeout)` - Czekaj na pojawienie się obrazu
+
 #### Task Executor
 - **Zmieniony:** `src/tasks/task_executor.py`
 - **Ulepszenia:**
@@ -164,10 +221,12 @@ Wszystkie istotne zmiany w projekcie Cosik AI Agent.
 - **Zmieniony:** `main.py`
 - **Ulepszenia:**
   - Inicjalizacja AI Engine
+  - Inicjalizacja Computer Vision
   - Automatyczne ładowanie pluginów przy starcie
   - Lepsza orchestracja komponentów
 - **Nowe komponenty:**
   - `self.ai_engine` - AI Engine instance
+  - `self.vision` - Computer Vision instance
   - `self.plugin_manager` - Plugin Manager instance
 
 ### 📊 Statystyki Kodu
@@ -175,20 +234,24 @@ Wszystkie istotne zmiany w projekcie Cosik AI Agent.
 **Nowe Pliki:**
 - `src/ai/__init__.py` (5 linii)
 - `src/ai/ai_engine.py` (450 linii)
+- `src/vision/__init__.py` (5 linii)
+- `src/vision/computer_vision.py` (380 linii)
 - `src/plugins/plugin_manager.py` (295 linii)
 - `src/plugins/scheduler_plugin.py` (250 linii)
 - `src/plugins/web_scraper_plugin.py` (340 linii)
 
 **Zmodyfikowane Pliki:**
-- `main.py` (+8 linii)
+- `main.py` (+12 linii)
 - `src/nlp/language_processor.py` (+25 linii)
+- `src/automation/gui_controller.py` (+125 linii)
 - `src/tasks/task_executor.py` (+35 linii)
+- `requirements.txt` (+6 dependencies)
 
 **Łącznie:**
-- **Dodane:** ~1,400 linii kodu
-- **Nowe moduły:** 5
+- **Dodane:** ~2,100 linii kodu
+- **Nowe moduły:** 7
 - **Nowe pluginy:** 2
-- **Ulepszonych komponentów:** 3
+- **Ulepszonych komponentów:** 4
 
 ### 🔌 Pluginy - Struktura
 
