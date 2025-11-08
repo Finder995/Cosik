@@ -13,6 +13,8 @@ try:
     CV2_AVAILABLE = True
 except ImportError:
     CV2_AVAILABLE = False
+    cv2 = None
+    np = None
 
 try:
     import pytesseract
@@ -20,13 +22,15 @@ try:
     OCR_AVAILABLE = True
 except ImportError:
     OCR_AVAILABLE = False
+    pytesseract = None
+    Image = None
 
 
 class ColorAnalyzer:
     """Analyze colors in screen regions."""
     
     @staticmethod
-    def get_dominant_color(image_array: np.ndarray) -> Tuple[int, int, int]:
+    def get_dominant_color(image_array) -> Tuple[int, int, int]:
         """
         Get dominant color in image.
         
@@ -36,7 +40,7 @@ class ColorAnalyzer:
         Returns:
             RGB tuple of dominant color
         """
-        if not CV2_AVAILABLE:
+        if not CV2_AVAILABLE or np is None:
             return (0, 0, 0)
         
         # Reshape image to list of pixels
@@ -52,7 +56,7 @@ class ColorAnalyzer:
     
     @staticmethod
     def detect_color_region(
-        image_array: np.ndarray,
+        image_array,
         color_rgb: Tuple[int, int, int],
         tolerance: int = 30
     ) -> List[Dict[str, Any]]:
@@ -67,7 +71,7 @@ class ColorAnalyzer:
         Returns:
             List of regions matching the color
         """
-        if not CV2_AVAILABLE:
+        if not CV2_AVAILABLE or np is None:
             return []
         
         # Convert to BGR (OpenCV format)
@@ -130,7 +134,7 @@ class UIElementDetector:
     def classify_element(
         self,
         region: Tuple[int, int, int, int],
-        image_array: Optional[np.ndarray] = None
+        image_array: Optional[Any] = None
     ) -> str:
         """
         Classify UI element type based on characteristics.
@@ -162,9 +166,9 @@ class UIElementDetector:
         else:
             return 'unknown'
     
-    def detect_buttons(self, image_array: np.ndarray) -> List[Dict[str, Any]]:
+    def detect_buttons(self, image_array) -> List[Dict[str, Any]]:
         """Detect button-like elements."""
-        if not CV2_AVAILABLE:
+        if not CV2_AVAILABLE or cv2 is None:
             return []
         
         gray = cv2.cvtColor(image_array, cv2.COLOR_BGR2GRAY)
@@ -220,7 +224,7 @@ class ScreenRecorder:
             logger.error(f"Failed to capture frame: {e}")
             return False
     
-    def stop_recording(self) -> List[np.ndarray]:
+    def stop_recording(self) -> List[Any]:
         """Stop recording and return frames."""
         self.recording = False
         logger.info(f"Stopped recording. Captured {len(self.frames)} frames")
@@ -252,7 +256,7 @@ class ImageComparison:
     """Compare images for changes or similarity."""
     
     @staticmethod
-    def calculate_similarity(img1: np.ndarray, img2: np.ndarray) -> float:
+    def calculate_similarity(img1, img2) -> float:
         """
         Calculate similarity between two images.
         
@@ -263,7 +267,7 @@ class ImageComparison:
         Returns:
             Similarity score (0.0 to 1.0)
         """
-        if not CV2_AVAILABLE:
+        if not CV2_AVAILABLE or cv2 is None or np is None:
             return 0.0
         
         # Resize to same dimensions if needed
@@ -284,8 +288,8 @@ class ImageComparison:
     
     @staticmethod
     def detect_changes(
-        img1: np.ndarray,
-        img2: np.ndarray,
+        img1,
+        img2,
         threshold: int = 30
     ) -> List[Dict[str, Any]]:
         """
@@ -299,7 +303,7 @@ class ImageComparison:
         Returns:
             List of changed regions
         """
-        if not CV2_AVAILABLE:
+        if not CV2_AVAILABLE or cv2 is None:
             return []
         
         # Ensure same dimensions
@@ -338,7 +342,7 @@ class OCREnhancer:
     """Enhanced OCR with preprocessing."""
     
     @staticmethod
-    def preprocess_for_ocr(image_array: np.ndarray) -> np.ndarray:
+    def preprocess_for_ocr(image_array) -> Any:
         """
         Preprocess image for better OCR results.
         
@@ -348,7 +352,7 @@ class OCREnhancer:
         Returns:
             Preprocessed image
         """
-        if not CV2_AVAILABLE:
+        if not CV2_AVAILABLE or cv2 is None:
             return image_array
         
         # Convert to grayscale
@@ -368,7 +372,7 @@ class OCREnhancer:
     
     @staticmethod
     def extract_text_enhanced(
-        image_array: np.ndarray,
+        image_array,
         language: str = 'eng+pol'
     ) -> Dict[str, Any]:
         """
@@ -381,7 +385,7 @@ class OCREnhancer:
         Returns:
             Extracted text and metadata
         """
-        if not OCR_AVAILABLE:
+        if not OCR_AVAILABLE or pytesseract is None or Image is None:
             return {
                 'success': False,
                 'error': 'OCR not available'

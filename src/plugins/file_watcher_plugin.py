@@ -13,23 +13,26 @@ try:
     from watchdog.observers import Observer
     from watchdog.events import FileSystemEventHandler, FileSystemEvent
     WATCHDOG_AVAILABLE = True
+    
+    class FileChangeHandler(FileSystemEventHandler):
+        """Handler for file system events."""
+        
+        def __init__(self, callback):
+            """Initialize handler with callback."""
+            super().__init__()
+            self.callback = callback
+        
+        def on_any_event(self, event: 'FileSystemEvent'):
+            """Handle any file system event."""
+            if not event.is_directory:
+                asyncio.create_task(self.callback(event))
+                
 except ImportError:
     WATCHDOG_AVAILABLE = False
+    FileSystemEventHandler = None
+    FileSystemEvent = None
+    FileChangeHandler = None
     logger.warning("watchdog not installed. Install with: pip install watchdog")
-
-
-class FileChangeHandler(FileSystemEventHandler):
-    """Handler for file system events."""
-    
-    def __init__(self, callback):
-        """Initialize handler with callback."""
-        super().__init__()
-        self.callback = callback
-    
-    def on_any_event(self, event: 'FileSystemEvent'):
-        """Handle any file system event."""
-        if not event.is_directory:
-            asyncio.create_task(self.callback(event))
 
 
 class FileWatcherPlugin:
