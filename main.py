@@ -18,6 +18,8 @@ from src.memory.memory_manager import MemoryManager
 from src.tasks.task_executor import TaskExecutor
 from src.system.system_manager import SystemManager
 from src.config.config_loader import ConfigLoader
+from src.ai.ai_engine import AIEngine
+from src.plugins.plugin_manager import PluginManager
 
 
 class CosikAgent:
@@ -42,11 +44,18 @@ class CosikAgent:
         # Setup logging
         self._setup_logging()
         
+        # Initialize AI engine first
+        self.ai_engine = AIEngine(self.config)
+        
+        # Initialize plugin manager
+        self.plugin_manager = PluginManager(self.config)
+        self.plugin_manager.load_all_plugins()
+        
         # Initialize components
-        self.nlp = LanguageProcessor(self.config)
+        self.nlp = LanguageProcessor(self.config, ai_engine=self.ai_engine)
         self.gui = GUIController(self.config)
         self.memory = MemoryManager(self.config)
-        self.task_executor = TaskExecutor(self.config, self.gui, self.memory)
+        self.task_executor = TaskExecutor(self.config, self.gui, self.memory, ai_engine=self.ai_engine)
         self.system = SystemManager(self.config)
         
         # Agent state

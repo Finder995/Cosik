@@ -8,7 +8,7 @@ from loguru import logger
 class TaskExecutor:
     """Execute tasks based on parsed intents."""
     
-    def __init__(self, config, gui_controller, memory_manager):
+    def __init__(self, config, gui_controller, memory_manager, ai_engine=None):
         """
         Initialize task executor.
         
@@ -16,10 +16,12 @@ class TaskExecutor:
             config: Configuration object
             gui_controller: GUI controller instance
             memory_manager: Memory manager instance
+            ai_engine: AI engine instance for advanced features
         """
         self.config = config
         self.gui = gui_controller
         self.memory = memory_manager
+        self.ai_engine = ai_engine
     
     async def execute(self, task: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -314,11 +316,35 @@ class TaskExecutor:
         
         logger.info(f"Processing complex task: {description}")
         
-        # This would integrate with AI to break down the task
-        # For now, return a placeholder
+        # Use AI engine to create a task plan
+        if self.ai_engine:
+            logger.info("Using AI engine to create task plan")
+            try:
+                plan = await self.ai_engine.create_task_plan(description)
+                
+                if plan:
+                    logger.info(f"AI created plan with {len(plan)} steps")
+                    # Convert plan steps to tasks
+                    continuation_tasks = []
+                    for step in plan:
+                        continuation_tasks.append({
+                            'intent': step.get('intent', 'unknown'),
+                            'parameters': step.get('parameters', {}),
+                            'description': step.get('description', '')
+                        })
+                    
+                    return {
+                        'success': True,
+                        'message': f'Created plan with {len(plan)} steps',
+                        'needs_continuation': True,
+                        'continuation_tasks': continuation_tasks
+                    }
+            except Exception as e:
+                logger.error(f"AI planning failed: {e}")
         
+        # Fallback if AI not available
         return {
             'success': True,
-            'message': 'Complex task processing not fully implemented',
+            'message': 'Complex task requires AI planning (not fully implemented)',
             'needs_continuation': False
         }
