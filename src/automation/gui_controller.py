@@ -17,9 +17,10 @@ except ImportError:
 class GUIController:
     """Control GUI elements and automate Windows applications."""
     
-    def __init__(self, config):
+    def __init__(self, config, vision=None):
         """Initialize GUI controller."""
         self.config = config
+        self.vision = vision
         
         if pyautogui:
             # Configure pyautogui
@@ -343,3 +344,128 @@ class GUIController:
             return (0, 0)
         
         return pyautogui.position()
+    
+    async def click_text(self, text: str, region: Optional[Tuple[int, int, int, int]] = None) -> bool:
+        """
+        Click on text found via OCR.
+        
+        Args:
+            text: Text to search for and click
+            region: Region to search in
+            
+        Returns:
+            True if successful
+        """
+        if not self.vision:
+            logger.error("Vision module not available for OCR")
+            return False
+        
+        try:
+            result = await self.vision.find_text_on_screen(text, region)
+            
+            if result['success'] and result['found'] and result['count'] > 0:
+                match = result['matches'][0]
+                logger.info(f"Found text '{text}' at ({match['center_x']}, {match['center_y']})")
+                return await self.click(match['center_x'], match['center_y'])
+            else:
+                logger.warning(f"Text '{text}' not found on screen")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Click text failed: {e}")
+            return False
+    
+    async def click_image(self, image_path: str, confidence: Optional[float] = None) -> bool:
+        """
+        Click on image found via template matching.
+        
+        Args:
+            image_path: Path to template image
+            confidence: Match confidence (default: from config)
+            
+        Returns:
+            True if successful
+        """
+        if not self.vision:
+            logger.error("Vision module not available for image matching")
+            return False
+        
+        try:
+            conf = confidence if confidence is not None else self.confidence
+            result = await self.vision.find_image_on_screen(image_path, conf)
+            
+            if result['success'] and result['found']:
+                logger.info(f"Found image at ({result['x']}, {result['y']})")
+                return await self.click(result['x'], result['y'])
+            else:
+                logger.warning(f"Image not found: {image_path}")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Click image failed: {e}")
+            return False
+    
+    async def wait_for_text(self, text: str, timeout: int = 30, 
+                          region: Optional[Tuple[int, int, int, int]] = None) -> bool:
+        """
+        Wait for text to appear on screen.
+        
+        Args:
+            text: Text to wait for
+            timeout: Timeout in seconds
+            region: Region to search in
+            
+        Returns:
+            True if text found within timeout
+        """
+        if not self.vision:
+            logger.error("Vision module not available")
+            return False
+        
+        import asyncio
+        start_time = time.time()
+        
+        while time.time() - start_time < timeout:
+            result = await self.vision.find_text_on_screen(text, region)
+            
+            if result['success'] and result['found']:
+                logger.info(f"Text '{text}' appeared after {time.time() - start_time:.1f}s")
+                return True
+            
+            await asyncio.sleep(1)
+        
+        logger.warning(f"Text '{text}' did not appear within {timeout}s")
+        return False
+    
+    async def wait_for_image(self, image_path: str, timeout: int = 30, 
+                           confidence: Optional[float] = None) -> bool:
+        """
+        Wait for image to appear on screen.
+        
+        Args:
+            image_path: Path to template image
+            timeout: Timeout in seconds
+            confidence: Match confidence
+            
+        Returns:
+            True if image found within timeout
+        """
+        if not self.vision:
+            logger.error("Vision module not available")
+            return False
+        
+        import asyncio
+        start_time = time.time()
+        conf = confidence if confidence is not None else self.confidence
+        
+        while time.time() - start_time < timeout:
+            result = await self.vision.find_image_on_screen(image_path, conf)
+            
+            if result['success'] and result['found']:
+                logger.info(f"Image appeared after {time.time() - start_time:.1f}s")
+                return True
+            
+            await asyncio.sleep(1)
+        
+        logger.warning(f"Image did not appear within {timeout}s")
+        return False

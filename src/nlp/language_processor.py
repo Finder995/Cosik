@@ -1,16 +1,17 @@
 """Natural Language Processing module for understanding user commands."""
 
 import re
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from loguru import logger
 
 
 class LanguageProcessor:
     """Process natural language to extract intents and parameters."""
     
-    def __init__(self, config):
+    def __init__(self, config, ai_engine=None):
         """Initialize the language processor."""
         self.config = config
+        self.ai_engine = ai_engine
         self.intent_patterns = self._load_intent_patterns()
     
     def _load_intent_patterns(self) -> Dict[str, List[str]]:
@@ -153,9 +154,20 @@ class LanguageProcessor:
         Returns:
             Parsed intent and parameters
         """
-        # This would integrate with OpenAI/Anthropic for complex parsing
-        # For now, return a generic task
-        logger.info("AI parsing not fully implemented, returning generic task")
+        # Use AI engine if available
+        if self.ai_engine:
+            logger.info("Using AI engine for complex parsing")
+            try:
+                # Get recent context from memory if available
+                context = None
+                result = await self.ai_engine.parse_complex_command(text, context)
+                result['original_text'] = text
+                return result
+            except Exception as e:
+                logger.error(f"AI parsing failed: {e}")
+        
+        # Fallback to generic task
+        logger.info("AI parsing not available, returning generic task")
         
         return {
             'intent': 'complex_task',
