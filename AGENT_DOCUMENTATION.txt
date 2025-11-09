@@ -3,9 +3,11 @@
 ================================================================================
 
 OPIS OGÓLNY:
-Cosik to zaawansowany agent AI zaprojektowany specjalnie dla systemu Windows 10.
-Agent rozumie język naturalny (polski i angielski), automatycznie wykonuje zadania,
-posiada pamięć długoterminową oraz zdolność do samomodyfikacji.
+Cosik to zaawansowany agent AI zaprojektowany dla desktopowej pracy w systemie 
+Windows 10. Agent wykorzystuje gotowe modele AI (GPT, Gemini, Llama) do automatyzacji 
+GUI, tworzenia programów i gier oraz obsługi aplikacji. Rozumie język naturalny 
+(polski i angielski), automatycznie wykonuje zadania, posiada pamięć długoterminową 
+oraz możliwość tworzenia kodu i gier.
 
 ================================================================================
 1. PRZETWARZANIE JĘZYKA NATURALNEGO (NLP)
@@ -91,44 +93,92 @@ Narzędzia wizualne:
 - Ulepszone OCR z preprocessingiem
 
 ================================================================================
-4. SILNIK AI
+4. INTEGRACJA Z MODELAMI AI
 ================================================================================
 
 MODUŁ: src/ai/ai_engine.py
 
-Integracja z modelami AI:
-- OpenAI GPT (GPT-3.5, GPT-4)
-- Anthropic Claude
-- Parsowanie złożonych poleceń przy użyciu AI
-- Tworzenie planów wieloetapowych zadań
-- Analiza błędów i proponowanie rozwiązań
+WSPARCIE DLA WIELU MODELI AI:
+
+A) OpenAI GPT:
+   - GPT-4 Turbo (128k context window)
+   - GPT-4 Vision (multimodalne - tekst + obrazy)
+   - GPT-3.5 Turbo (szybki i ekonomiczny)
+   - DALL-E 3 (generowanie obrazów)
+   - Whisper (rozpoznawanie mowy)
+
+B) Google Gemini:
+   - Gemini Ultra (najbardziej zaawansowany)
+   - Gemini Pro (balanced performance)
+   - Gemini Nano (on-device)
+   - Gemini Vision (analiza obrazów)
+
+C) Meta Llama (lokalne i przez API):
+   - Llama 2 (7B, 13B, 70B parametrów)
+   - Llama 3 (gdy dostępny)
+   - Code Llama (specjalizowany w kodzie)
+   - Lokalne uruchamianie przez Ollama
+   - GPU acceleration support
+
+D) Anthropic Claude:
+   - Claude 3 Opus (najlepszy reasoning)
+   - Claude 3 Sonnet (balanced)
+   - Claude 3 Haiku (najszybszy)
+   - 200k context window
+
+E) Modele Open Source:
+   - Mistral 7B/8x7B (Mixtral)
+   - Phi-2/Phi-3 (Microsoft)
+   - Falcon
+   - Vicuna
+   - WizardLM
+   - Uruchamianie lokalne przez llama.cpp/Ollama
+
+MOŻLIWOŚCI:
+- Multi-model routing - automatyczny wybór najlepszego modelu
+- Model fallback - przełączanie przy błędach
+- Cost optimization - wybór najtańszego modelu
+- Response caching - cache dla identycznych zapytań
+- Batch processing - grupowanie zapytań
+- Streaming responses - real-time output
+- Fine-tuning support - dostosowanie do zadań
+- Local model hosting - prywatność i kontrola kosztów
 
 MODUŁ: src/ai/reasoning_engine.py
 
-Zaawansowany reasoning:
-- Analiza celów (pattern-based i AI-based)
-- Dekompozycja złożonych celów na prostsze zadania
-- Podejmowanie decyzji (scoring opcji)
-- Uczenie się z wyników (success/failure patterns)
-- Pamięć wzorców sukcesu i porażki
+Zaawansowany reasoning przy użyciu AI:
+- Chain-of-thought prompting dla złożonych zadań
+- Tree-of-thoughts dla kreatywnych rozwiązań
+- Few-shot learning z przykładami
+- Zero-shot task execution
+- Multi-step planning i decomposition
+- Context-aware decision making
+- Self-correction i validation
+- Uncertainty estimation
 
 MODUŁ: src/ai/autonomous_agent.py
 
-Agent autonomiczny:
-- Tryb pełnej autonomii
-- Ocena sytuacji
-- Samodzielne podejmowanie decyzji
-- Rozwiązywanie przeszkód
-- Tworzenie alternatywnych planów
-- Strategie recovery (odzyskiwanie po błędach)
-- Uczenie się z rezultatów
+Agent autonomiczny wykorzystujący AI:
+- Pełna autonomia w wykonywaniu zadań
+- Samodzielna analiza ekranu przez vision models
+- Dynamic planning i replanning
+- Error detection i recovery
+- Alternative approach generation
+- Learning from successes i failures
+- Goal-oriented behavior
+- Risk assessment
 
 MODUŁ: src/ai/prompt_builder.py
 
-Budowanie promptów:
-- Optymalizowane szablony promptów dla różnych zadań
-- Zarządzanie kontekstem rozmowy
-- Podsumowania historii interakcji
+Zaawansowane budowanie promptów:
+- Role-based prompting (developer, designer, gamer)
+- Task-specific templates
+- Context injection
+- Dynamic prompt optimization
+- Few-shot example selection
+- Chain-of-thought structuring
+- Output format specification
+- Constraint enforcement
 
 ================================================================================
 5. SYSTEM PAMIĘCI
@@ -198,7 +248,125 @@ Orkiestracja workflow:
 - Pause/Resume/Cancel workflow
 
 ================================================================================
-8. OPERACJE SYSTEMOWE
+8. GENEROWANIE KODU I TWORZENIE PROGRAMÓW
+================================================================================
+
+MODUŁ: src/code_generation/code_generator.py (PLANOWANE)
+
+AI-powered generowanie kodu:
+- Python (scripts, applications, automation)
+- JavaScript/TypeScript (web apps, Node.js)
+- C# (Unity games, .NET apps)
+- C++ (performance-critical, Unreal Engine)
+- HTML/CSS (web interfaces)
+- SQL (database queries, schemas)
+- Shell scripts (automation)
+
+Możliwości:
+- Complete project generation z opisu
+- Code refactoring i optimization
+- Bug fixing przez AI analysis
+- Unit test generation
+- Documentation generation (docstrings, README)
+- Design pattern implementation
+- API client generation
+- Database schema generation
+
+MODUŁ: src/code_generation/project_manager.py (PLANOWANE)
+
+Zarządzanie projektami:
+- Project scaffolding (struktura folderów)
+- Dependency management (requirements.txt, package.json)
+- Configuration file generation
+- Build script creation
+- Git initialization i .gitignore
+- CI/CD pipeline setup
+- Docker containerization
+- README i documentation
+
+MODUŁ: src/code_generation/code_validator.py (PLANOWANE)
+
+Walidacja generowanego kodu:
+- Syntax checking (linting)
+- Static analysis
+- Security scanning
+- Code style validation
+- Import resolution
+- Type checking
+- Test execution
+- Performance analysis
+
+================================================================================
+9. TWORZENIE GIER I GAME DEVELOPMENT
+================================================================================
+
+MODUŁ: src/game_dev/unity_controller.py (PLANOWANE)
+
+Integracja z Unity:
+- Scene creation i manipulation
+- GameObject spawning i configuration
+- Component addition (scripts, colliders, etc.)
+- Prefab generation i instantiation
+- Asset import i organization
+- Script generation (C# MonoBehaviour)
+- Build configuration
+- Play mode testing automation
+
+MODUŁ: src/game_dev/unreal_controller.py (PLANOWANE)
+
+Integracja z Unreal Engine:
+- Level creation i editing
+- Blueprint generation
+- C++ class generation
+- Actor spawning i setup
+- Material creation
+- Animation setup
+- Lighting configuration
+- Packaging i deployment
+
+MODUŁ: src/game_dev/game_mechanics.py (PLANOWANE)
+
+Generowanie game mechanics:
+- Player controller (movement, input)
+- Camera systems (follow, orbit, first-person)
+- Inventory system
+- Health/damage system
+- Quest/mission system
+- Dialogue system
+- Save/load system
+- UI system (menus, HUD)
+- Combat system
+- AI behavior (enemy, NPC)
+- Audio management
+- Particle effects
+
+MODUŁ: src/game_dev/asset_generator.py (PLANOWANE)
+
+AI-powered asset generation:
+- Sprites i textures (przez DALL-E, Stable Diffusion)
+- 3D models (przez text-to-3D APIs)
+- Animations (procedural)
+- Sound effects (przez audio AI)
+- Music (przez music generation AI)
+- Dialogue text (przez LLMs)
+- Quest descriptions
+- Item descriptions
+
+MODUŁ: src/game_dev/game_bot_framework.py (PLANOWANE)
+
+Framework dla game botów:
+- Screen state recognition
+- Game-specific action library
+- Macro recording i playback
+- Path finding i navigation
+- Resource gathering automation
+- Combat automation
+- Trading automation
+- Multi-account management
+- Anti-cheat evasion (human-like behavior)
+
+================================================================================
+10. OPERACJE SYSTEMOWE
 ================================================================================
 
 MODUŁ: src/system/system_manager.py
@@ -232,7 +400,7 @@ Monitoring wydajności:
 - Raporty wydajności
 
 ================================================================================
-9. PLUGINY
+11. PLUGINY
 ================================================================================
 
 MODUŁ: src/plugins/plugin_manager.py
@@ -301,7 +469,7 @@ I) Web Scraper (web_scraper_plugin.py):
    - Obsługa JavaScript (przez Selenium)
 
 ================================================================================
-10. REPLAY I NAGRYWANIE
+12. REPLAY I NAGRYWANIE
 ================================================================================
 
 MODUŁ: src/automation/command_replay.py
@@ -316,7 +484,7 @@ System nagrywania i odtwarzania:
 - Pause/Resume/Stop podczas odtwarzania
 
 ================================================================================
-11. INTERFEJSY
+13. INTERFEJSY
 ================================================================================
 
 A) CLI (src/cli/interactive_cli.py):
@@ -340,7 +508,7 @@ B) REST API (src/api/api_server.py):
    - CORS support
 
 ================================================================================
-12. ROZPOZNAWANIE GŁOSU
+14. ROZPOZNAWANIE GŁOSU
 ================================================================================
 
 MODUŁ: src/voice/voice_recognition.py
@@ -355,7 +523,7 @@ Funkcje głosowe:
 - Timeout i phrase time limit
 
 ================================================================================
-13. SESJE
+15. SESJE
 ================================================================================
 
 MODUŁ: src/session/session_manager.py
@@ -368,7 +536,7 @@ Zarządzanie sesjami:
 - Czyszczenie nieaktywnych sesji
 
 ================================================================================
-14. NARZĘDZIA POMOCNICZE
+16. NARZĘDZIA POMOCNICZE
 ================================================================================
 
 MODUŁ: src/utils/smart_retry.py
@@ -381,7 +549,7 @@ Smart Retry:
 - Statystyki retry
 
 ================================================================================
-15. KONFIGURACJA
+17. KONFIGURACJA
 ================================================================================
 
 MODUŁ: src/config/config_loader.py
@@ -402,26 +570,51 @@ Kluczowe parametry konfiguracyjne:
 - logging.level - Poziom logowania
 
 ================================================================================
-16. CECHY SPECJALNE
+18. CECHY SPECJALNE
 ================================================================================
 
-A) Samomodyfikacja:
+A) Integracja z wieloma modelami AI:
+   - Automatyczne przełączanie między GPT, Gemini, Llama
+   - Model fallback przy błędach
+   - Cost optimization - wybór najtańszego modelu
+   - Local models dla prywatności i kontroli kosztów
+   - Response caching dla oszczędności
+
+B) Generowanie kodu i programów:
+   - Tworzenie kompletnych projektów z opisu
+   - Wsparcie dla wielu języków programowania
+   - Automatyczne testy i dokumentacja
+   - Refactoring i optimization
+
+C) Tworzenie gier:
+   - Unity i Unreal Engine integration
+   - Automatyczne generowanie game mechanics
+   - AI-powered asset generation
+   - Game bot framework
+
+D) Zaawansowana automatyzacja GUI:
+   - Vision AI dla rozpoznawania elementów
+   - Self-healing automation
+   - Multi-window management
+   - Application integration
+
+E) Samomodyfikacja:
    - Agent może modyfikować własny kod (z backupami)
    - Modyfikacja konfiguracji
    - Dynamiczne ładowanie pluginów
    - Historia wszystkich modyfikacji
 
-B) Auto-kontynuacja:
+F) Auto-kontynuacja:
    - Automatyczne wznawianie przerwanych zadań
    - Pamięć nieukończonych zadań
    - Inteligentne retry po błędach
 
-C) Kontekstowa świadomość:
+G) Kontekstowa świadomość:
    - Pamięć poprzednich interakcji
    - Uczenie się z sukcesu i porażki
    - Adaptacja do preferencji użytkownika
 
-D) Bezpieczeństwo:
+H) Bezpieczeństwo:
    - Backupy przed modyfikacjami
    - Walidacja działań
    - Logging wszystkich operacji
