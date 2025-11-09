@@ -1,0 +1,518 @@
+================================================================================
+                    COSIK AI AGENT - DOKUMENTACJA OBECNYCH MOŻLIWOŚCI
+================================================================================
+
+OPIS OGÓLNY:
+Cosik to zaawansowany agent AI zaprojektowany specjalnie dla systemu Windows 10.
+Agent rozumie język naturalny (polski i angielski), automatycznie wykonuje zadania,
+posiada pamięć długoterminową oraz zdolność do samomodyfikacji.
+
+================================================================================
+1. PRZETWARZANIE JĘZYKA NATURALNEGO (NLP)
+================================================================================
+
+MODUŁ: src/nlp/language_processor.py
+
+Możliwości:
+- Rozpoznawanie intencji użytkownika z tekstu w języku polskim i angielskim
+- Parsowanie poleceń przy użyciu wyrażeń regularnych i AI
+- Ekstrakcja parametrów z naturalnego języka
+- Obsługa złożonych wieloetapowych poleceń
+
+Wspierane intencje:
+- open_application: Otwieranie aplikacji
+- close_application: Zamykanie aplikacji
+- click: Klikanie elementów GUI
+- type_text: Wpisywanie tekstu
+- read_file: Czytanie plików
+- write_file: Zapisywanie plików
+- modify_file: Modyfikacja plików
+- system_command: Wykonywanie poleceń systemowych
+- change_setting: Zmiana ustawień
+- search: Wyszukiwanie
+- move_mouse: Przesuwanie kursora
+- take_screenshot: Robienie zrzutów ekranu
+- wait: Czekanie
+
+================================================================================
+2. AUTOMATYZACJA GUI
+================================================================================
+
+MODUŁ: src/automation/gui_controller.py
+
+Możliwości kontroli GUI:
+- Klikanie (lewy/prawy/środkowy przycisk myszy)
+- Podwójne kliknięcie
+- Przesuwanie myszy do określonych współrzędnych
+- Wpisywanie tekstu
+- Naciskanie klawiszy i kombinacji (hotkeys)
+- Robienie zrzutów ekranu (pełny ekran lub region)
+- Wyszukiwanie tekstu/obrazów na ekranie
+- Zarządzanie oknami (lista, focus, maksymalizacja, zamykanie)
+- Czekanie na pojawienie się tekstu/obrazu
+- Klikanie na podstawie tekstu lub obrazu
+
+Funkcje pomocnicze:
+- Pobranie rozmiaru ekranu
+- Pobranie pozycji myszy
+- OCR (rozpoznawanie tekstu z ekranu)
+
+================================================================================
+3. WIZJA KOMPUTEROWA (COMPUTER VISION)
+================================================================================
+
+MODUŁ: src/vision/computer_vision.py
+
+Możliwości OCR i rozpoznawania:
+- Ekstrakcja tekstu z ekranu (OCR)
+- Ekstrakcja tekstu z obrazów
+- Wyszukiwanie tekstu na ekranie
+- Wyszukiwanie obrazów przez template matching
+- Wykrywanie wszystkich wystąpień wzorca
+- Detekcja elementów UI
+
+MODUŁ: src/vision/pattern_recognizer.py
+
+Zaawansowane rozpoznawanie wzorców:
+- Rozpoznawanie elementów GUI na podstawie opisu
+- Rozpoznawanie tekstowe
+- Rozpoznawanie wizualne
+- Rozpoznawanie kontekstowe
+- Uczenie się z interakcji
+- Cache dla wydajności
+
+MODUŁ: src/vision/vision_utils.py
+
+Narzędzia wizualne:
+- Analiza kolorów (dominujący kolor, regiony kolorów)
+- Detekcja elementów UI (przyciski, pola tekstowe)
+- Nagrywanie ekranu (screen recorder)
+- Porównywanie obrazów (similarity, wykrywanie zmian)
+- Ulepszone OCR z preprocessingiem
+
+================================================================================
+4. SILNIK AI
+================================================================================
+
+MODUŁ: src/ai/ai_engine.py
+
+Integracja z modelami AI:
+- OpenAI GPT (GPT-3.5, GPT-4)
+- Anthropic Claude
+- Parsowanie złożonych poleceń przy użyciu AI
+- Tworzenie planów wieloetapowych zadań
+- Analiza błędów i proponowanie rozwiązań
+
+MODUŁ: src/ai/reasoning_engine.py
+
+Zaawansowany reasoning:
+- Analiza celów (pattern-based i AI-based)
+- Dekompozycja złożonych celów na prostsze zadania
+- Podejmowanie decyzji (scoring opcji)
+- Uczenie się z wyników (success/failure patterns)
+- Pamięć wzorców sukcesu i porażki
+
+MODUŁ: src/ai/autonomous_agent.py
+
+Agent autonomiczny:
+- Tryb pełnej autonomii
+- Ocena sytuacji
+- Samodzielne podejmowanie decyzji
+- Rozwiązywanie przeszkód
+- Tworzenie alternatywnych planów
+- Strategie recovery (odzyskiwanie po błędach)
+- Uczenie się z rezultatów
+
+MODUŁ: src/ai/prompt_builder.py
+
+Budowanie promptów:
+- Optymalizowane szablony promptów dla różnych zadań
+- Zarządzanie kontekstem rozmowy
+- Podsumowania historii interakcji
+
+================================================================================
+5. SYSTEM PAMIĘCI
+================================================================================
+
+MODUŁ: src/memory/memory_manager.py
+
+Trwała pamięć agenta (SQLite):
+- Przechowywanie interakcji użytkownika
+- Historia wykonanych zadań
+- Logi błędów
+- Historia samomodyfikacji
+- Kontekst poprzednich działań
+- Funkcja auto-kontynuacji (niepełne zadania)
+
+Baza danych zawiera tabele:
+- interactions: Wszystkie interakcje z użytkownikiem
+- tasks: Historia zadań (pending/completed/failed)
+- errors: Logi błędów
+- self_modifications: Historia modyfikacji agenta
+
+================================================================================
+6. ZARZĄDZANIE KONTEKSTEM
+================================================================================
+
+MODUŁ: src/context/context_manager.py
+
+Świadomość kontekstu:
+- Przechowywanie aktualnego kontekstu sesji
+- Zarządzanie preferencjami użytkownika
+- Ograniczenia (constraints) dla działań
+- Kontekst czasowy i środowiskowy
+- Walidacja proponowanych akcji
+- Analiza kontekstu dla lepszego zrozumienia
+
+================================================================================
+7. SYSTEM WYKONYWANIA ZADAŃ
+================================================================================
+
+MODUŁ: src/tasks/task_executor.py
+
+Wykonywanie zadań:
+- Mapowanie intencji na działania
+- Integracja z GUI controller
+- Obsługa błędów
+- Automatyczna kontynuacja zadań
+- Integracja z AI engine dla złożonych zadań
+
+MODUŁ: src/tasks/task_queue.py
+
+Zaawansowana kolejka zadań:
+- Priorytetyzacja (CRITICAL, HIGH, NORMAL, LOW)
+- Zarządzanie zależnościami między zadaniami
+- Wykonywanie równoległe (parallel execution)
+- Tagowanie zadań
+- Persistence (zapisywanie stanu kolejki)
+- Statystyki i monitoring
+
+MODUŁ: src/tasks/workflow_orchestrator.py
+
+Orkiestracja workflow:
+- Wykonywanie sekwencyjne i równoległe
+- Tryb adaptacyjny
+- Zarządzanie zależnościami
+- Error recovery
+- Optymalizacja workflow
+- Pause/Resume/Cancel workflow
+
+================================================================================
+8. OPERACJE SYSTEMOWE
+================================================================================
+
+MODUŁ: src/system/system_manager.py
+
+Operacje na plikach i systemie:
+- Czytanie/zapisywanie plików
+- Modyfikacja plików
+- Automatyczne tworzenie backupów
+- Usuwanie plików
+- Zarządzanie katalogami
+- Dostęp do rejestru Windows (odczyt/zapis)
+- Wykonywanie skryptów PowerShell
+
+MODUŁ: src/system/error_recovery.py
+
+System odzyskiwania po błędach:
+- Klasyfikacja błędów
+- Automatyczne strategie recovery
+- Circuit breaker pattern
+- Health check agenta
+- Historia błędów i recovery
+
+MODUŁ: src/system/performance_monitor.py
+
+Monitoring wydajności:
+- Snapshot'y zasobów systemowych (CPU, RAM, dysk)
+- Profiling wykonania zadań
+- Wykrywanie bottlenecków
+- Trendy wydajności
+- Alerty przy przekroczeniu progów
+- Raporty wydajności
+
+================================================================================
+9. PLUGINY
+================================================================================
+
+MODUŁ: src/plugins/plugin_manager.py
+
+System pluginów umożliwia rozszerzanie funkcjonalności agenta.
+
+Dostępne pluginy:
+
+A) Browser Automation (browser_automation_plugin.py):
+   - Automatyzacja przeglądarki przez Selenium
+   - Nawigacja (otwieranie URL, back, forward, refresh)
+   - Wypełnianie formularzy
+   - Klikanie elementów
+   - Ekstrakcja danych ze stron
+   - Wykonywanie JavaScript
+
+B) Clipboard (clipboard_plugin.py):
+   - Kopiowanie/wklejanie tekstu
+   - Historia schowka
+   - Monitoring zmian w schowku
+   - Wyszukiwanie w historii
+
+C) Database (database_plugin.py):
+   - Połączenia z bazami danych (SQLite, PostgreSQL, MySQL)
+   - Wykonywanie zapytań SQL
+   - Export/import danych
+   - Backup baz danych
+
+D) Email (email_plugin.py):
+   - Wysyłanie emaili (SMTP)
+   - Odbieranie emaili (IMAP)
+   - Załączniki
+   - Filtrowanie wiadomości
+   - HTML/plain text
+
+E) File Watcher (file_watcher_plugin.py):
+   - Monitorowanie katalogów
+   - Wykrywanie zmian w plikach
+   - Callback'i dla zdarzeń (created, modified, deleted)
+
+F) Notification (notification_plugin.py):
+   - Wyświetlanie powiadomień Windows (toast)
+   - System alertów
+   - Powiadomienia z priorytetami
+   - Historia powiadomień
+
+G) Process Monitor (process_monitor_plugin.py):
+   - Lista procesów systemowych
+   - Informacje o procesach (CPU, RAM)
+   - Zabijanie procesów
+   - Top procesy (według CPU/RAM)
+   - Ciągły monitoring procesów
+
+H) Scheduler (scheduler_plugin.py):
+   - Planowanie zadań (cron-like)
+   - Wykonywanie w określonym czasie
+   - Zadania cykliczne
+   - Lista zaplanowanych zadań
+   - Anulowanie zadań
+
+I) Web Scraper (web_scraper_plugin.py):
+   - Scraping stron WWW
+   - Ekstrakcja danych (tekst, linki, tabele)
+   - BeautifulSoup integration
+   - Śledzenie linków
+   - Obsługa JavaScript (przez Selenium)
+
+================================================================================
+10. REPLAY I NAGRYWANIE
+================================================================================
+
+MODUŁ: src/automation/command_replay.py
+
+System nagrywania i odtwarzania:
+- Nagrywanie sekwencji poleceń do workflow
+- Biblioteka workflow (save/load/delete)
+- Wyszukiwanie workflow po tagach/nazwie
+- Export/import workflow (JSON)
+- Odtwarzanie z substytucją zmiennych
+- Retry logic z exponential backoff
+- Pause/Resume/Stop podczas odtwarzania
+
+================================================================================
+11. INTERFEJSY
+================================================================================
+
+A) CLI (src/cli/interactive_cli.py):
+   - Interaktywny interfejs wiersza poleceń
+   - Auto-completion poleceń
+   - Historia poleceń
+   - Syntax highlighting
+   - Wieloliniowe wejście
+
+B) REST API (src/api/api_server.py):
+   - RESTful API dla zdalnego sterowania
+   - Autentykacja przez API keys
+   - Endpointy:
+     * POST /tasks - Wysyłanie zadań
+     * GET /tasks/{task_id} - Status zadania
+     * GET /status - Status agenta
+     * GET /memory/interactions - Historia interakcji
+   - WebSocket dla real-time updates
+   - Webhooks dla powiadomień o zdarzeniach
+   - Rate limiting
+   - CORS support
+
+================================================================================
+12. ROZPOZNAWANIE GŁOSU
+================================================================================
+
+MODUŁ: src/voice/voice_recognition.py
+
+Funkcje głosowe:
+- Speech-to-text z mikrofonu
+- Speech-to-text z pliku audio
+- Ciągłe nasłuchiwanie (continuous listening)
+- Callback'i dla rozpoznanych poleceń
+- Historia poleceń głosowych
+- Wsparcie wielu języków
+- Timeout i phrase time limit
+
+================================================================================
+13. SESJE
+================================================================================
+
+MODUŁ: src/session/session_manager.py
+
+Zarządzanie sesjami:
+- Tworzenie i zarządzanie sesjami użytkownika
+- Przechowywanie stanu sesji
+- Timeout sesji
+- Wznowienie sesji
+- Czyszczenie nieaktywnych sesji
+
+================================================================================
+14. NARZĘDZIA POMOCNICZE
+================================================================================
+
+MODUŁ: src/utils/smart_retry.py
+
+Smart Retry:
+- Inteligentne ponawianie operacji
+- Exponential backoff
+- Klasyfikacja błędów (transient/permanent)
+- Kontekst retry (historia prób)
+- Statystyki retry
+
+================================================================================
+15. KONFIGURACJA
+================================================================================
+
+MODUŁ: src/config/config_loader.py
+
+System konfiguracji:
+- Ładowanie z pliku YAML (config.yaml)
+- Dot notation dla zagnieżdżonych kluczy
+- Wartości domyślne
+- Dynamiczna aktualizacja konfiguracji
+- Persystencja zmian
+
+Kluczowe parametry konfiguracyjne:
+- agent.auto_continuation - Auto-kontynuacja zadań
+- agent.max_retries - Maksymalna liczba prób
+- ai.provider - Dostawca AI (openai/anthropic)
+- ai.model - Model AI
+- memory.enabled - Włączenie pamięci
+- logging.level - Poziom logowania
+
+================================================================================
+16. CECHY SPECJALNE
+================================================================================
+
+A) Samomodyfikacja:
+   - Agent może modyfikować własny kod (z backupami)
+   - Modyfikacja konfiguracji
+   - Dynamiczne ładowanie pluginów
+   - Historia wszystkich modyfikacji
+
+B) Auto-kontynuacja:
+   - Automatyczne wznawianie przerwanych zadań
+   - Pamięć nieukończonych zadań
+   - Inteligentne retry po błędach
+
+C) Kontekstowa świadomość:
+   - Pamięć poprzednich interakcji
+   - Uczenie się z sukcesu i porażki
+   - Adaptacja do preferencji użytkownika
+
+D) Bezpieczeństwo:
+   - Backupy przed modyfikacjami
+   - Walidacja działań
+   - Logging wszystkich operacji
+   - API authentication
+
+================================================================================
+WYMAGANIA SYSTEMOWE
+================================================================================
+
+- Windows 10
+- Python 3.8+
+- Zależności (requirements.txt):
+  * OpenAI/Anthropic API dla zaawansowanych funkcji AI
+  * PyAutoGUI, pywinauto - automatyzacja GUI
+  * OpenCV, pytesseract - computer vision
+  * SQLite - pamięć
+  * FastAPI, uvicorn - REST API
+  * Selenium - automatyzacja przeglądarki
+  * I inne (patrz requirements.txt)
+
+================================================================================
+STRUKTURA PLIKÓW
+================================================================================
+
+main.py                  - Główny plik uruchomieniowy
+config.yaml             - Konfiguracja
+requirements.txt        - Zależności Python
+
+src/
+├── ai/                 - Silniki AI i reasoning
+├── api/                - REST API server
+├── automation/         - GUI automation i replay
+├── cli/                - Interactive CLI
+├── config/             - Config loader
+├── context/            - Context management
+├── memory/             - System pamięci
+├── nlp/                - Natural language processing
+├── plugins/            - System pluginów i pluginy
+├── session/            - Session management
+├── system/             - System operations
+├── tasks/              - Task execution i orchestration
+├── utils/              - Narzędzia pomocnicze
+├── vision/             - Computer vision
+└── voice/              - Voice recognition
+
+data/                   - Dane i pamięć agenta
+logs/                   - Logi
+
+================================================================================
+SPOSÓB UŻYCIA
+================================================================================
+
+1. Tryb pojedynczego polecenia:
+   python main.py --command "otwórz notepad"
+
+2. Tryb interaktywny:
+   python main.py --interactive
+
+3. Z własną konfiguracją:
+   python main.py --config custom_config.yaml
+
+4. Poprzez REST API:
+   - Uruchom API server
+   - Wysyłaj zapytania HTTP do endpointów
+
+================================================================================
+MOŻLIWOŚCI PROGRAMISTYCZNE
+================================================================================
+
+Agent może być używany jako:
+- Biblioteka Python (import z src/)
+- Standalone aplikacja (main.py)
+- REST API service (api_server.py)
+- Plugin do innych systemów
+
+Przykłady użycia jako biblioteka:
+```python
+from src.ai.ai_engine import AIEngine
+from src.nlp.language_processor import LanguageProcessor
+from src.tasks.task_executor import TaskExecutor
+
+# Tworzenie komponentów
+engine = AIEngine(config)
+nlp = LanguageProcessor(config, engine)
+executor = TaskExecutor(config, gui, memory, engine)
+
+# Parsowanie i wykonywanie
+parsed = await nlp.parse("otwórz Chrome")
+result = await executor.execute(parsed)
+```
+
+================================================================================
+KONIEC DOKUMENTACJI
+================================================================================
