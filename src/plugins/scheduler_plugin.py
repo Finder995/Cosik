@@ -150,10 +150,18 @@ class SchedulerPlugin:
         """Execute a scheduled task."""
         logger.info(f"Executing scheduled task: {task.get('description', 'unknown')}")
         
-        # This would integrate with the main agent's task executor
-        # For now, just log
-        # In a real implementation, this would add the task to the agent's queue
-        pass
+        # Integrate with the main agent's task executor if available
+        if hasattr(self.agent, 'task_queue') and self.agent.task_queue is not None:
+            # Add task to agent's queue for execution
+            self.agent.task_queue.append({
+                'intent': 'scheduled_task',
+                'parameters': task.get('parameters', {}),
+                'description': task.get('description', 'Scheduled task'),
+                'scheduled_at': task.get('scheduled_at')
+            })
+            logger.info(f"Added scheduled task to agent queue: {task.get('description')}")
+        else:
+            logger.warning("Agent task queue not available, task not executed")
     
     def _list_scheduled(self) -> Dict[str, Any]:
         """List all scheduled tasks."""

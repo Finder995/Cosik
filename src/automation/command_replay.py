@@ -397,8 +397,18 @@ class WorkflowPlayer:
                 
                 # Handle error
                 if command.retry_on_failure:
-                    # Could implement retry logic here
-                    pass
+                    # Implement retry logic with exponential backoff
+                    max_retries = getattr(command, 'max_retries', 3)
+                    retry_count = errors[-1].get('retry_count', 0)
+                    
+                    if retry_count < max_retries:
+                        logger.info(f"Retrying step {self.current_step} (attempt {retry_count + 1}/{max_retries})")
+                        await asyncio.sleep(2 ** retry_count)  # Exponential backoff
+                        errors[-1]['retry_count'] = retry_count + 1
+                        self.current_step -= 1  # Retry same step
+                        continue
+                    else:
+                        logger.error(f"Step {self.current_step} failed after {max_retries} retries")
                 
                 if not command.continue_on_error:
                     logger.error("Workflow stopped due to error")

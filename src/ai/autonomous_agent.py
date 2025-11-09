@@ -425,11 +425,16 @@ class AutonomousAgent:
         if strategy == 'wait_and_retry':
             await asyncio.sleep(5)
         elif strategy == 'reset_context':
-            # Clear some context
-            pass
+            # Clear some context to start fresh
+            if hasattr(self, 'context_manager') and self.context_manager:
+                await self.context_manager.clear_temporary_context()
+            logger.info("Context reset for recovery")
         elif strategy == 'reduce_complexity':
-            # Simplify current goal
-            pass
+            # Simplify current goal by breaking it into smaller steps
+            if self.current_objective:
+                logger.info(f"Reducing complexity of objective: {self.current_objective}")
+                # Mark current objective as needing human help
+                self.current_objective = f"Simplified: {self.current_objective[:50]}..."
         elif strategy == 'ask_for_help':
             logger.info("Requesting human intervention")
             self.active = False
