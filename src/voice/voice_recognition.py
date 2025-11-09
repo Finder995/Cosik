@@ -418,7 +418,7 @@ class VoiceRecognitionPlugin:
         self.module = VoiceRecognitionModule(config)
     
     async def execute(self, command: str, **kwargs) -> Dict[str, Any]:
-        action = kwargs.get('action', 'recognize')
+        action = kwargs.pop('action', 'recognize')
         
         if action == 'recognize':
             return await self.module.recognize_from_microphone(**kwargs)

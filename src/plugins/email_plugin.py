@@ -67,7 +67,7 @@ class EmailPlugin:
         Returns:
             Operation result
         """
-        action = kwargs.get('action', 'send')
+        action = kwargs.pop('action', 'send')
         
         try:
             if action == 'send':

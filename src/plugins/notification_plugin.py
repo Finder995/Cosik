@@ -352,7 +352,7 @@ class NotificationPlugin:
         self.system = NotificationSystem(config)
     
     async def execute(self, command: str, **kwargs) -> Dict[str, Any]:
-        action = kwargs.get('action', 'send')
+        action = kwargs.pop('action', 'send')
         
         if action == 'send':
             return await self.system.send(**kwargs)

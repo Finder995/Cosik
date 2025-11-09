@@ -75,7 +75,7 @@ class BrowserAutomationPlugin:
                 'error': 'Selenium not available'
             }
         
-        action = kwargs.get('action', 'navigate')
+        action = kwargs.pop('action', 'navigate')
         
         try:
             if action == 'start':

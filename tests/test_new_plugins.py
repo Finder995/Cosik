@@ -207,11 +207,15 @@ class TestBrowserAutomationPlugin:
     @pytest.mark.asyncio
     async def test_by_method_mapping(self, plugin):
         """Test CSS selector mapping."""
-        from selenium.webdriver.common.by import By
-        
-        assert plugin._get_by_method('css') == By.CSS_SELECTOR
-        assert plugin._get_by_method('id') == By.ID
-        assert plugin._get_by_method('xpath') == By.XPATH
+        try:
+            from selenium.webdriver.common.by import By
+            
+            assert plugin._get_by_method('css') == By.CSS_SELECTOR
+            assert plugin._get_by_method('id') == By.ID
+            assert plugin._get_by_method('xpath') == By.XPATH
+        except ImportError:
+            # Selenium not available, skip this test
+            pytest.skip("Selenium not installed")
 
 
 class TestNotificationPlugin:

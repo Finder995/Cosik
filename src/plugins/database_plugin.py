@@ -65,7 +65,7 @@ class DatabasePlugin:
         Returns:
             Operation result
         """
-        action = kwargs.get('action', 'query')
+        action = kwargs.pop('action', 'query')
         
         try:
             if action == 'connect':
