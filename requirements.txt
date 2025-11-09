@@ -58,3 +58,19 @@ prompt-toolkit>=3.0.0  # Better CLI with history and auto-completion
 pytest>=7.4.0
 pytest-asyncio>=0.21.0
 pytest-cov>=4.1.0
+
+# New plugins (v2.3.0)
+# Database plugin
+# psycopg2-binary>=2.9.0  # PostgreSQL support (optional)
+
+# Browser automation plugin
+selenium>=4.15.0  # Web browser automation
+
+# Email plugin (uses built-in smtplib/imaplib)
+
+# Notification plugin
+win10toast>=0.9  # Windows toast notifications (optional)
+
+# Voice recognition
+SpeechRecognition>=3.10.0  # Speech-to-text
+# pyaudio>=0.2.13  # Microphone input (optional, platform-specific)
