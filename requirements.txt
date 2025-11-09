@@ -45,6 +45,15 @@ watchdog>=3.0.0
 # Logging and monitoring
 loguru>=0.7.0
 
+# Advanced features (v2.2.0) - Optional
+# REST API Server
+fastapi>=0.104.0  # REST API framework
+uvicorn>=0.24.0   # ASGI server
+aiohttp>=3.9.0    # Async HTTP client for webhooks
+
+# Enhanced Interactive CLI
+prompt-toolkit>=3.0.0  # Better CLI with history and auto-completion
+
 # Testing
 pytest>=7.4.0
 pytest-asyncio>=0.21.0

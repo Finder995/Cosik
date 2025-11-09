@@ -2,6 +2,328 @@
 
 Wszystkie istotne zmiany w projekcie Cosik AI Agent.
 
+## [2.2.0] - 2024-11-09 (Latest)
+
+### ✨ Nowe Zaawansowane Systemy (New Advanced Systems)
+
+**Focus: Maksimum kodu, minimum dokumentacji (zgodnie z wymaganiami)**
+
+#### 1. **Advanced Task Queue System**
+- **Plik:** `src/tasks/task_queue.py` (~450 linii kodu)
+- **Funkcjonalności:**
+  - Priority-based task scheduling (5 poziomów priorytetu)
+  - Task dependencies i execution order
+  - Parallel execution z concurrency limit
+  - Task cancellation i timeout
+  - Queue persistence (JSON)
+  - Auto-retry z configurowalnymi limitami
+- **API:**
+  ```python
+  from src.tasks.task_queue import AdvancedTaskQueue, Task, TaskPriority
+  
+  queue = AdvancedTaskQueue(max_concurrent=5)
+  
+  # Dodaj task z priorytetem
+  task = Task(
+      id="task1",
+      intent="open_app",
+      priority=TaskPriority.HIGH,
+      dependencies=["task0"],
+      timeout=30.0
+  )
+  await queue.add_task(task)
+  
+  # Process queue
+  await queue.process_queue(executor_function)
+  
+  # Stats
+  stats = queue.get_queue_stats()
+  ```
+
+#### 2. **Error Recovery System**
+- **Plik:** `src/system/error_recovery.py` (~430 linii kodu)
+- **Funkcjonalności:**
+  - Automatic error classification (9 kategorii)
+  - Pattern detection dla recurring errors
+  - Multiple recovery strategies (retry, cleanup, escalation, alternative)
+  - Error analytics i reporting
+  - Learning from successful recoveries
+  - Preventive action suggestions
+- **API:**
+  ```python
+  from src.system.error_recovery import ErrorRecoverySystem
+  
+  recovery = ErrorRecoverySystem()
+  
+  # Record error
+  error = await recovery.record_error(
+      "Connection timeout",
+      task_info={'intent': 'fetch_url'},
+      context={'attempt': 1}
+  )
+  
+  # Attempt recovery
+  success = await recovery.attempt_recovery(error)
+  
+  # Get insights
+  stats = recovery.get_error_statistics()
+  patterns = recovery.get_pattern_insights()
+  suggestions = recovery.suggest_preventive_actions()
+  ```
+
+#### 3. **Performance Monitor**
+- **Plik:** `src/system/performance_monitor.py` (~470 linii kodu)
+- **Funkcjonalności:**
+  - Real-time execution time tracking
+  - Resource usage monitoring (CPU, memory, disk I/O)
+  - Performance bottleneck detection
+  - Historical performance data
+  - Automatic alerts dla performance issues
+  - Context manager dla easy measurement
+- **API:**
+  ```python
+  from src.system.performance_monitor import PerformanceMonitor
+  
+  monitor = PerformanceMonitor(history_size=1000)
+  await monitor.start_monitoring()
+  
+  # Measure operation
+  async with monitor.measure('file_processing', {'file': 'data.txt'}):
+      await process_file('data.txt')
+  
+  # Get stats
+  summary = monitor.get_performance_summary()
+  bottlenecks = monitor.identify_bottlenecks()
+  trends = monitor.get_resource_trends(minutes=60)
+  
+  # Export report
+  monitor.export_report('./performance_report.json')
+  ```
+
+#### 4. **REST API Server**
+- **Plik:** `src/api/api_server.py` (~480 linii kodu)
+- **Funkcjonalności:**
+  - Full RESTful API dla remote control
+  - WebSocket support dla real-time updates
+  - API key authentication i authorization
+  - Task submission i monitoring
+  - Health i status endpoints
+  - Webhook support dla event notifications
+- **Endpoints:**
+  ```
+  GET  /health                    - Health check
+  GET  /api/status                - Agent status
+  POST /api/tasks                 - Submit task
+  GET  /api/tasks/{id}            - Get task status
+  POST /api/stop                  - Stop agent
+  POST /api/keys                  - Create API key
+  GET  /api/keys                  - List keys
+  POST /api/webhooks              - Register webhook
+  WS   /ws                        - WebSocket endpoint
+  ```
+- **Użycie:**
+  ```python
+  from src.api.api_server import APIServer
+  
+  api = APIServer(agent, host="0.0.0.0", port=8000)
+  await api.start()
+  
+  # Remote usage via curl:
+  # curl -H "Authorization: Bearer YOUR_KEY" \
+  #      -X POST http://localhost:8000/api/tasks \
+  #      -d '{"command": "open notepad"}'
+  ```
+
+#### 5. **Command Replay System**
+- **Plik:** `src/automation/command_replay.py` (~490 linii kodu)
+- **Funkcjonalności:**
+  - Record command sequences jako workflows
+  - Replay workflows z parameters
+  - Workflow templates i variables (${var} syntax)
+  - Batch operations
+  - Import/export workflows (JSON)
+  - Workflow library management
+- **API:**
+  ```python
+  from src.automation.command_replay import CommandReplaySystem
+  
+  replay = CommandReplaySystem(agent)
+  
+  # Recording
+  replay.start_recording("daily_backup")
+  replay.record("open file manager")
+  replay.record("copy files to backup")
+  workflow_name = replay.stop_recording()  # Auto-saves
+  
+  # Playback with variables
+  await replay.replay("daily_backup", variables={
+      "backup_path": "D:/Backups",
+      "date": "2024-11-09"
+  })
+  
+  # Library management
+  workflows = replay.list_workflows()
+  results = replay.search("backup")
+  ```
+
+#### 6. **Enhanced Interactive CLI**
+- **Plik:** `src/cli/interactive_cli.py` (~470 linii kodu)
+- **Funkcjonalności:**
+  - Command history z up/down arrows (prompt_toolkit)
+  - Auto-completion dla commands i workflows
+  - Syntax highlighting
+  - Command aliases
+  - Built-in commands (help, status, performance, errors, etc.)
+  - Workflow recording/replay z CLI
+- **Built-in Commands:**
+  ```
+  help, exit, status, history, clear
+  workflows, record, stop, replay
+  performance, errors, queue, config
+  ```
+- **Użycie:**
+  ```python
+  from src.cli.interactive_cli import run_interactive_cli
+  
+  await run_interactive_cli(agent)
+  ```
+
+### 📊 Statystyki (Statistics)
+
+**Nowy Kod:**
+- Advanced Task Queue: ~450 linii
+- Error Recovery: ~430 linii
+- Performance Monitor: ~470 linii
+- REST API Server: ~480 linii
+- Command Replay: ~490 linii
+- Interactive CLI: ~470 linii
+- **Łącznie: ~2,790 linii nowego kodu funkcjonalnego**
+
+**Nowe Pliki:**
+1. `src/tasks/task_queue.py`
+2. `src/system/error_recovery.py`
+3. `src/system/performance_monitor.py`
+4. `src/api/__init__.py`
+5. `src/api/api_server.py`
+6. `src/automation/command_replay.py`
+7. `src/cli/__init__.py`
+8. `src/cli/interactive_cli.py`
+
+**Nowe Dependencies (opcjonalne):**
+- `fastapi` + `uvicorn` - dla REST API
+- `websockets` - dla WebSocket support
+- `aiohttp` - dla webhooks
+- `prompt-toolkit` - dla enhanced CLI
+
+### 🎯 Przykłady Użycia (Usage Examples)
+
+#### Kompletny Workflow z Wszystkimi Systemami
+
+```python
+import asyncio
+from main import CosikAgent
+from src.tasks.task_queue import AdvancedTaskQueue, Task, TaskPriority
+from src.system.error_recovery import ErrorRecoverySystem
+from src.system.performance_monitor import PerformanceMonitor
+from src.automation.command_replay import CommandReplaySystem
+from src.api.api_server import APIServer
+from src.cli.interactive_cli import run_interactive_cli
+
+async def advanced_example():
+    # Initialize agent with all systems
+    agent = CosikAgent()
+    
+    # 1. Setup Performance Monitoring
+    agent.performance_monitor = PerformanceMonitor()
+    await agent.performance_monitor.start_monitoring()
+    
+    # 2. Setup Error Recovery
+    agent.error_recovery = ErrorRecoverySystem()
+    
+    # 3. Setup Advanced Task Queue
+    agent.task_queue = AdvancedTaskQueue(max_concurrent=3)
+    
+    # 4. Setup Command Replay
+    agent.command_replay = CommandReplaySystem(agent)
+    
+    # 5. Start REST API Server (in background)
+    api = APIServer(agent, port=8000)
+    # asyncio.create_task(api.start())
+    
+    # 6. Use systems together
+    async with agent.performance_monitor.measure('complex_workflow'):
+        try:
+            # Add tasks with priorities
+            task1 = Task(
+                id="backup",
+                intent="backup_files",
+                priority=TaskPriority.HIGH
+            )
+            task2 = Task(
+                id="cleanup",
+                intent="clean_temp",
+                priority=TaskPriority.LOW,
+                dependencies=["backup"]
+            )
+            
+            await agent.task_queue.add_task(task1)
+            await agent.task_queue.add_task(task2)
+            
+            # Process queue
+            await agent.task_queue.process_queue(agent.execute_task)
+            
+        except Exception as e:
+            # Auto error recovery
+            error = await agent.error_recovery.record_error(
+                str(e),
+                task_info={'workflow': 'backup'},
+                context={'timestamp': datetime.now()}
+            )
+            recovered = await agent.error_recovery.attempt_recovery(error)
+            if recovered:
+                print("Error recovered successfully!")
+    
+    # 7. Get insights
+    perf_summary = agent.performance_monitor.get_performance_summary()
+    error_stats = agent.error_recovery.get_error_statistics()
+    queue_stats = agent.task_queue.get_queue_stats()
+    
+    print(f"Performance: {perf_summary}")
+    print(f"Errors: {error_stats}")
+    print(f"Queue: {queue_stats}")
+    
+    await agent.stop()
+
+# Run
+asyncio.run(advanced_example())
+```
+
+#### Interactive CLI Mode
+
+```python
+async def run_cli():
+    agent = CosikAgent()
+    
+    # Initialize all systems
+    agent.performance_monitor = PerformanceMonitor()
+    agent.error_recovery = ErrorRecoverySystem()
+    agent.task_queue = AdvancedTaskQueue()
+    agent.command_replay = CommandReplaySystem(agent)
+    
+    # Start interactive CLI
+    await run_interactive_cli(agent)
+
+asyncio.run(run_cli())
+```
+
+### 🔧 Integracja z Istniejącym Kodem (Integration)
+
+Wszystkie nowe systemy są **opcjonalne** i **nie łamią** istniejącego kodu:
+- Działają standalone
+- Łatwa integracja do main.py
+- Graceful degradation gdy dependencies brakuje
+- Pełna kompatybilność wsteczna
+
 ## [2.0.0] - 2024 (W trakcie rozwoju)
 
 ### ✨ Nowe Funkcje (New Features)
