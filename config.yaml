@@ -2,18 +2,99 @@
 
 agent:
   name: "Cosik"
-  version: "1.0.0"
+  version: "2.0.0"
   auto_continuation: true
   max_retries: 3
   task_timeout: 300  # seconds
 
-# AI Model Configuration
+# AI Model Configuration - Multi-Model Support
 ai:
-  provider: "openai"  # options: openai, anthropic, local
-  model: "gpt-4"
-  temperature: 0.7
-  max_tokens: 2000
+  # Primary model selection
+  primary_provider: "openai"  # options: openai, google, anthropic, meta, local
+  
+  # Model fallback chain (używane gdy primary zawiedzie)
+  fallback_chain: ["openai", "anthropic", "local"]
+  
+  # Auto-routing - automatyczny wybór modelu na podstawie zadania
+  auto_routing:
+    enabled: true
+    strategy: "cost_optimized"  # options: cost_optimized, performance, balanced
+  
+  # OpenAI Configuration
+  openai:
+    model: "gpt-4-turbo"  # options: gpt-4-turbo, gpt-4, gpt-3.5-turbo
+    vision_model: "gpt-4-vision-preview"
+    image_model: "dall-e-3"
+    speech_model: "whisper-1"
+    temperature: 0.7
+    max_tokens: 4096
+    
+  # Google Gemini Configuration
+  google:
+    model: "gemini-pro"  # options: gemini-ultra, gemini-pro, gemini-nano
+    vision_model: "gemini-pro-vision"
+    temperature: 0.7
+    max_tokens: 4096
+    
+  # Anthropic Claude Configuration
+  anthropic:
+    model: "claude-3-opus"  # options: claude-3-opus, claude-3-sonnet, claude-3-haiku
+    temperature: 0.7
+    max_tokens: 4096
+    
+  # Meta Llama Configuration (local or API)
+  meta:
+    model: "llama-2-70b"  # options: llama-2-7b, llama-2-13b, llama-2-70b, llama-3, code-llama
+    backend: "ollama"  # options: ollama, llama-cpp, together-ai, replicate
+    temperature: 0.7
+    max_tokens: 4096
+    
+  # Local Models Configuration
+  local:
+    backend: "ollama"  # options: ollama, llama-cpp, lm-studio
+    model: "mistral-7b"  # options: mistral-7b, phi-2, vicuna, etc.
+    gpu_acceleration: true
+    temperature: 0.7
+    max_tokens: 4096
+    
+  # Response caching
+  caching:
+    enabled: true
+    ttl: 3600  # seconds
+    max_size: 1000  # number of cached responses
 
+# Code Generation Settings
+code_generation:
+  enabled: true
+  languages: ["python", "javascript", "typescript", "csharp", "cpp", "html", "css", "sql"]
+  auto_format: true
+  auto_lint: true
+  generate_tests: true
+  generate_docs: true
+  validation:
+    syntax_check: true
+    security_scan: true
+    performance_analysis: false
+
+# Game Development Settings
+game_dev:
+  enabled: true
+  engines:
+    unity:
+      enabled: true
+      project_path: ""
+      auto_import_assets: true
+    unreal:
+      enabled: false
+      project_path: ""
+    godot:
+      enabled: false
+      project_path: ""
+  asset_generation:
+    images: true
+    sounds: false
+    models_3d: false
+  
 # Memory Configuration
 memory:
   enabled: true
@@ -21,17 +102,20 @@ memory:
   vector_db_path: "./data/vector_store"
   max_history: 1000
   persistence_interval: 60  # seconds
-
+  
 # GUI Automation
 gui:
   screenshot_interval: 1.0  # seconds
   confidence_threshold: 0.8
   failsafe: true
   pause_between_actions: 0.5
+  vision_ai_enabled: true  # Use AI vision models for screen understanding
+  self_healing: true  # Adapt to UI changes automatically
+  multi_window: true  # Handle multiple windows simultaneously
 
 # File Operations
 file_operations:
-  allowed_extensions: [".txt", ".json", ".yaml", ".xml", ".csv", ".log", ".py", ".js", ".html", ".css"]
+  allowed_extensions: [".txt", ".json", ".yaml", ".xml", ".csv", ".log", ".py", ".js", ".html", ".css", ".cs", ".cpp", ".h", ".md"]
   max_file_size: 10485760  # 10 MB
   backup_enabled: true
   backup_path: "./data/backups"
